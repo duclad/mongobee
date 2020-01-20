@@ -1,8 +1,9 @@
 ![mongobee](https://raw.githubusercontent.com/mongobee/mongobee/master/misc/mongobee_min.png)
 
-[![Build Status](https://travis-ci.org/mongobee/mongobee.svg?branch=master)](https://travis-ci.org/mongobee/mongobee) [![Coverity Scan Build Status](https://scan.coverity.com/projects/2721/badge.svg)](https://scan.coverity.com/projects/2721) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.mongobee/mongobee/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.mongobee/mongobee) [![Licence](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/mongobee/mongobee/blob/master/LICENSE)
+[![Licence](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/mongobee/mongobee/blob/master/LICENSE)
 ---
 
+This fork has removed the spring dependencies
 
 **mongobee** is a Java tool which helps you to *manage changes* in your MongoDB and *synchronize* them with your application.
 The concept is very similar to other db migration tools such as [Liquibase](http://www.liquibase.org) or [Flyway](http://flywaydb.org) but *without using XML/JSON/YML files*.
@@ -12,41 +13,7 @@ The goal is to keep this tool simple and comfortable to use.
 
 **mongobee** provides new approach for adding changes (change sets) based on Java classes and methods with appropriate annotations.
 
-## Getting started
 
-### Add a dependency
-
-With Maven
-```xml
-<dependency>
-  <groupId>com.github.mongobee</groupId>
-  <artifactId>mongobee</artifactId>
-  <version>0.13</version>
-</dependency>
-```
-With Gradle
-```groovy
-compile 'org.javassist:javassist:3.18.2-GA' // workaround for ${javassist.version} placeholder issue*
-compile 'com.github.mongobee:mongobee:0.13'
-```
-
-### Usage with Spring
-
-You need to instantiate Mongobee object and provide some configuration.
-If you use Spring can be instantiated as a singleton bean in the Spring context. 
-In this case the migration process will be executed automatically on startup.
-
-```java
-@Bean
-public Mongobee mongobee(){
-  Mongobee runner = new Mongobee("mongodb://YOUR_DB_HOST:27017/DB_NAME");
-  runner.setDbName("yourDbName");         // host must be set if not set in URI
-  runner.setChangeLogsScanPackage(
-       "com.example.yourapp.changelogs"); // the package to be scanned for changesets
-  
-  return runner;
-}
-```
 
 
 ### Usage without Spring
@@ -172,43 +139,7 @@ public void someChange5(MongoTemplate mongoTemplate, Environment environment) {
 }
 ```
 
-### Using Spring profiles
-     
-**mongobee** accepts Spring's `org.springframework.context.annotation.Profile` annotation. If a change log or change set class is annotated  with `@Profile`, 
-then it is activated for current application profiles.
 
-_Example 1_: annotated change set will be invoked for a `dev` profile
-```java
-@Profile("dev")
-@ChangeSet(author = "testuser", id = "myDevChangest", order = "01")
-public void devEnvOnly(DB db){
-  // ...
-}
-```
-_Example 2_: all change sets in a changelog will be invoked for a `test` profile
-```java
-@ChangeLog(order = "1")
-@Profile("test")
-public class ChangelogForTestEnv{
-  @ChangeSet(author = "testuser", id = "myTestChangest", order = "01")
-  public void testingEnvOnly(DB db){
-    // ...
-  } 
-}
-```
-
-#### Enabling @Profile annotation (option)
-      
-To enable the `@Profile` integration, please inject `org.springframework.core.env.Environment` to you runner.
-
-```java      
-@Bean @Autowired
-public Mongobee mongobee(Environment environment) {
-  Mongobee runner = new Mongobee(uri);
-  runner.setSpringEnvironment(environment)
-  //... etc
-}
-```
 
 ## Known issues
 
