@@ -5,8 +5,7 @@ import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;
 import com.github.mongobee.exception.MongobeeChangeSetException;
 import org.reflections.Reflections;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
+
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -33,17 +32,12 @@ public class ChangeService {
   private final List<String> activeProfiles;
 
   public ChangeService(String changeLogsBasePackage) {
-    this(changeLogsBasePackage, null);
-  }
-
-  public ChangeService(String changeLogsBasePackage, Environment environment) {
+  
     this.changeLogsBasePackage = changeLogsBasePackage;
 
-    if (environment != null && environment.getActiveProfiles() != null && environment.getActiveProfiles().length> 0) {
-      this.activeProfiles = asList(environment.getActiveProfiles());
-    } else {
+    
       this.activeProfiles = asList(DEFAULT_PROFILE);
-    }
+    
   }
 
   public List<Class<?>> fetchChangeLogs(){
@@ -90,23 +84,8 @@ public class ChangeService {
   }
 
   private boolean matchesActiveSpringProfile(AnnotatedElement element) {
-    if (!ClassUtils.isPresent("org.springframework.context.annotation.Profile", null)) {
-      return true;
-    }
-    if (!element.isAnnotationPresent(Profile.class)) {
-      return true; // no-profiled changeset always matches
-    }
-    List<String> profiles = asList(element.getAnnotation(Profile.class).value());
-    for (String profile : profiles) {
-      if (profile != null && profile.length() > 0 && profile.charAt(0) == '!') {
-        if (!activeProfiles.contains(profile.substring(1))) {
-          return true;
-        }
-      } else if (activeProfiles.contains(profile)) {
-        return true;
-      }
-    }
-    return false;
+    return true;
+  
   }
 
   private List<?> filterByActiveProfiles(Collection<? extends AnnotatedElement> annotated) {

@@ -1,6 +1,5 @@
 package com.github.mongobee.dao;
 
-import static org.springframework.util.StringUtils.hasText;
 
 import java.util.Date;
 
@@ -17,6 +16,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import static com.github.mongobee.MongobeeUtil.*;
 
 /**
  * @author lstolowski
