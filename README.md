@@ -3,7 +3,8 @@
 [![Licence](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/mongobee/mongobee/blob/master/LICENSE)
 ---
 
-This fork has removed the spring dependencies
+This fork has removed the spring dependencies and the bugfix to be compatible with Mongoo Atlas Cloud is applied.
+
 
 **mongobee** is a Java tool which helps you to *manage changes* in your MongoDB and *synchronize* them with your application.
 The concept is very similar to other db migration tools such as [Liquibase](http://www.liquibase.org) or [Flyway](http://flywaydb.org) but *without using XML/JSON/YML files*.
